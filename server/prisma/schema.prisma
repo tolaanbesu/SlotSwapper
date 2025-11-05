@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String        @unique
+  password     String
+  events       Event[]
+  sentRequests SwapRequest[] @relation("sentRequests")
+  recvRequests SwapRequest[] @relation("recvRequests")
+  createdAt    DateTime      @default(now())
+}
+
+model Event {
+  id        Int      @id @default(autoincrement())
+  title     String
+  startTime DateTime
+  endTime   DateTime
+  status    Status   @default(BUSY)
+  owner     User     @relation(fields: [ownerId], references: [id])
+  ownerId   Int
+  sentSwapRequests     SwapRequest[] @relation("mySlot")
+  receivedSwapRequests SwapRequest[] @relation("theirSlot")
+  createdAt DateTime @default(now())
+}
+
+model SwapRequest {
+  id          Int       @id @default(autoincrement())
+  mySlot      Event     @relation("mySlot", fields: [mySlotId], references: [id])
+  mySlotId    Int
+  theirSlot   Event     @relation("theirSlot", fields: [theirSlotId], references: [id])
+  theirSlotId Int
+  sender      User      @relation("sentRequests", fields: [senderId], references: [id])
+  senderId    Int
+  receiver    User      @relation("recvRequests", fields: [receiverId], references: [id])
+  receiverId  Int
+  status      SwapStatus @default(PENDING)
+  createdAt   DateTime   @default(now())
+}
+
+enum Status {
+  BUSY
+  SWAPPABLE
+  SWAP_PENDING
+}
+
+enum SwapStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
