@@ -92,3 +92,22 @@ export async function getRequests(req, res) {
   });
   res.json({ incoming, outgoing });
 }
+
+export async function cancelSwapRequest(req, res) {
+  const requestId = Number(req.params.id);
+  const userId = req.user.id;
+  const swapReq = await prisma.swapRequest.findUnique({ where: { id: requestId } });
+
+  if (!swapReq) return res.status(404).json({ error: 'Swap request not found' });
+  if (swapReq.senderId !== userId) return res.status(403).json({ error: 'Not the sender' });
+
+  await prisma.$transaction(async (tx) => {
+    await tx.swapRequest.update({ where: { id: requestId }, data: { status: SwapStatus.REJECTED } });
+    await tx.event.updateMany({
+      where: { id: { in: [swapReq.mySlotId, swapReq.theirSlotId] } },
+      data: { status: Status.SWAPPABLE },
+    });
+  });
+
+  res.json({ ok: true, status: 'cancelled' });
+}
