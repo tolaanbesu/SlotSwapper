@@ -9,7 +9,11 @@ import eventRoutes from './routes/eventRoutes.js';
 import swapRoutes from './routes/swapRoutes.js';
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: 'https://slot-swapper-tq9b.vercel.app',
+  credentials: true
+}));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
