@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import PasswordInput from '../components/common/PasswordInput';
-import Logo from '../components/common/logo';
-import { PRIMARY_BLUE } from '../api';
+import { useAuth } from '../../context/AuthContext';
+import PasswordInput from '../../components/common/PasswordInput';
+import Logo from '../../components/common/logo';
+import { PRIMARY_BLUE } from '../../api';
 import { Mail } from 'lucide-react';
 
 const LoginScreen = ({ setPage }) => {
@@ -20,7 +20,9 @@ const LoginScreen = ({ setPage }) => {
 
         if (!result.success) {
             setError(result.message);
-        } 
+        }else{
+            setPage('dashboard');
+        }
     };
 
     return (

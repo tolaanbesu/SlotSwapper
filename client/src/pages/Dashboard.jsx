@@ -18,7 +18,6 @@ const DashboardContent = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [editEvent, setEditEvent] = useState(null); 
 
-    // Fetch events from backend
     useEffect(() => {
     if (!token) return;
     setAuthToken(token)
@@ -60,16 +59,15 @@ const DashboardContent = () => {
 
 
     const handleDeleteEvent = async (eventId) => {
-        try {
-            await api.delete(`/events/${eventId}`);
-            setEvents(events.filter(event => event.id !== eventId)); // Remove event from state
-        } catch (err) {
-            console.error("Failed to delete event:", err);
-            alert("Failed to delete event.");
-        }
-    };
+    try {
+        await api.delete(`/events/${eventId}`); 
+        setEvents(events.filter(event => event.id !== eventId));
+    } catch (err) {
+        console.error("Failed to delete event:", err);
+        alert(err.response?.data?.error || "Failed to delete event.");
+    }
+};
 
- 
     const handleEditEvent = (event) => {
     setEditEvent(event);  
     setIsOpen(true);      
@@ -159,7 +157,7 @@ const DashboardContent = () => {
                     <button
                         className={`px-4 py-2 text-white text-sm font-semibold rounded-lg shadow-md transition ${PRIMARY_BLUE}`}
                         onClick={() => {
-                            setEditEvent(null); // Clear edit event for new event creation
+                            setEditEvent(null); 
                             setIsOpen(true);
                         }}
                     >
@@ -235,10 +233,3 @@ const DashboardScreen = ({ currentPage, setPage }) => (
 );
 
 export default DashboardScreen;
-
-
-
-
-
-
-

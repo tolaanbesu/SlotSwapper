@@ -1,49 +1,9 @@
-// import React, { useState } from 'react';
-// import axios from 'axios';
-// import { useAuth } from '../context/AuthContext';
-// import { useNavigate } from 'react-router-dom';
 
-// const API = import.meta.env.VITE_API_URL;
-
-// export default function Signup() {
-//   const { login } = useAuth();
-//   const navigate = useNavigate();
-//   const [name, setName] = useState('');
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-
-//   const submit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const res = await axios.post(`${API}/auth/signup`, { name, email, password });
-//       login(res.data.token, res.data.user);
-//       navigate('/');
-//     } catch (err) {
-//       console.error(err);
-//       alert(err?.response?.data?.error || 'Signup failed');
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-md mx-auto mt-8 bg-white p-6 rounded shadow">
-//       <h2 className="text-xl font-bold mb-4">Sign up</h2>
-//       <form onSubmit={submit}>
-//         <input className="w-full border p-2 mb-3" placeholder="Name" value={name} onChange={e=>setName(e.target.value)} />
-//         <input className="w-full border p-2 mb-3" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
-//         <input className="w-full border p-2 mb-3" placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} />
-//         <button className="w-full bg-green-600 text-white py-2 rounded">Create account</button>
-//       </form>
-//     </div>
-//   );
-// }
-
-
-// src/pages/Auth/SignupScreen.jsx
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import PasswordInput from '../components/common/PasswordInput';
-import Logo from '../components/common/logo';
-import { PRIMARY_BLUE } from '../api';
+import { useAuth } from '../../context/AuthContext';
+import PasswordInput from '../../components/common/PasswordInput';
+import Logo from '../../components/common/logo';
+import { PRIMARY_BLUE } from '../../api';
 import { User, Mail } from 'lucide-react';
 
 const SignupScreen = ({ setPage }) => {

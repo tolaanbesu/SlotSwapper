@@ -18,12 +18,11 @@ export default function Contact({handleBack}) {
         try {
             await new Promise(resolve => setTimeout(resolve, 1500)); 
 
-            // Success feedback
             setStatusMessage({
                 type: 'success',
                 text: "Thank you for reaching out! We’ve received your message and will get back to you soon."
             });
-            // Reset form
+
             setForm({ name: "", email: "", message: "" });
 
         } catch{
@@ -42,7 +41,6 @@ export default function Contact({handleBack}) {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50 font-sans p-4">
             
-            {/* Status Message Banner */}
             {statusMessage && (
                 <div className={`fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg flex items-center gap-3 transition-opacity duration-300 ${statusMessage.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
                     <CheckCircle size={20} />
@@ -55,7 +53,6 @@ export default function Contact({handleBack}) {
 
             <div className="relative p-6 md:p-12 bg-white shadow-2xl rounded-3xl max-w-5xl w-full">
                 
-                {/* Back Button */}
                 <button 
                     onClick={handleBack} 
                     className="flex items-center text-gray-500 hover:text-green-600 hover:bg-gray-100 transition-colors duration-200 mb-6 p-2 rounded-lg"
@@ -74,7 +71,6 @@ export default function Contact({handleBack}) {
                 
                 <div className="grid lg:grid-cols-3 gap-12">
                     
-                    {/* Contact Info (Side Panel) */}
                     <div className="space-y-6 lg:col-span-1 p-6 bg-green-50 rounded-2xl border border-green-100 shadow-inner">
                         <h2 className="text-2xl font-bold text-green-700 mb-4">Contact Details</h2>
                         
@@ -107,7 +103,6 @@ export default function Contact({handleBack}) {
                         </div>
                     </div>
 
-                    {/* Contact Form */}
                     <form onSubmit={handleSubmit} className="space-y-6 lg:col-span-2">
                         <input
                             type="text"

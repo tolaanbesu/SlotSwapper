@@ -1,12 +1,12 @@
-import { useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useCallback } from 'react';
 import AppLayout from '../components/Layout/Applayout';
 import { PRIMARY_GREEN, PRIMARY_BLUE, PRIMARY_RED } from '../api';
 import { Zap, Clock, User, Check, X, Send } from 'lucide-react';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import {api} from '../api'; // ✅ axios instance with auth header
+import {api} from '../api'; 
+import { useAuth } from '../context/AuthContext';
 
-// ✅ Request Card Component
 const RequestCard = ({ request, onAction }) => {
   const parsedTimestamp = request.createdAt
     ? parseISO(request.createdAt)
@@ -102,45 +102,66 @@ const RequestCard = ({ request, onAction }) => {
   );
 };
 
-const RequestsContent = () => {
+const RequestsContent = ({setPage}) => {
   const [requests, setRequests] = useState([]);
   const [filter, setFilter] = useState('All');
   const [loading, setLoading] = useState(false);
 
-  // ✅ Fetch all requests
+  const { token } = useAuth();
+
+
+
+  const fetchRequests = useCallback(async () => {
+  if (!token) return;
+
+  try {
+    setLoading(true);
+    const { data } = await api.get('/requests', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const allRequests = [
+      ...data.incoming.map((r) => ({ ...r, type: 'received' })),
+      ...data.outgoing.map((r) => ({ ...r, type: 'sent' })),
+    ];
+    setRequests(allRequests);
+  } catch (err) {
+    console.error('Error fetching requests:', err);
+  } finally {
+    setLoading(false);
+  }
+}, [token]);
+
   useEffect(() => {
     fetchRequests();
-  }, []);
+  }, [fetchRequests]);
 
-  async function fetchRequests() {
-    try {
-      setLoading(true);
-      const { data } = await api.get('/requests');
-      const allRequests = [
-        ...data.incoming.map((r) => ({ ...r, type: 'received' })),
-        ...data.outgoing.map((r) => ({ ...r, type: 'sent' })),
-      ];
-      setRequests(allRequests);
-    } catch (err) {
-      console.error('Error fetching requests:', err);
-    } finally {
-      setLoading(false);
-    }
-  }
+async function handleAction(id, action) {
+  if(!token) return;
 
-  // ✅ Handle Accept / Reject / Cancel
-  async function handleAction(id, action) {
-    try {
-      if (action === 'cancel') {
-        await api.post(`/swap-response/${id}`, { accept: false }); // cancel acts as reject
-      } else {
-        await api.post(`/swap-response/${id}`, { accept: action });
-      }
-      await fetchRequests();
-    } catch (err) {
-      console.error('Failed to update request:', err);
+  try {
+    if(action === 'cancel') {
+      // Call the new cancel endpoint
+      await api.post(
+        `/swap-cancel/${id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } else {
+      await api.post(
+        `/swap-response/${id}`,
+        { accept: action },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
     }
+
+    await fetchRequests();
+  } catch (err) {
+    console.error('Failed to update request:', err);
   }
+}
+
+
 
   const filteredRequests =
     filter === 'All'
@@ -163,7 +184,7 @@ const RequestsContent = () => {
     </div>
   );
 
-  const navigate = useNavigate();
+ 
 
   return (
     <div className="flex-grow p-4 md:p-8 overflow-y-auto">
@@ -184,7 +205,7 @@ const RequestsContent = () => {
         </h2>
         <button
         className={`px-4 py-2 text-white text-sm font-semibold rounded-lg shadow-md transition ${PRIMARY_BLUE} hover:bg-sky-700 flex items-center`}
-        onClick={() => navigate('/marketplace')} // Use navigate instead
+        onClick={() => setPage('marketplace')} 
       >
         <Send className="w-4 h-4 mr-2" /> Send New Request
       </button>
@@ -213,7 +234,7 @@ const RequestsContent = () => {
 
 const RequestsScreen = ({ currentPage, setPage }) => (
   <AppLayout currentPage={currentPage} setPage={setPage}>
-    <RequestsContent />
+    <RequestsContent setPage={setPage}/>
   </AppLayout>
 );
 

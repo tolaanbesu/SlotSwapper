@@ -1,4 +1,3 @@
-// src/components/common/Logo.jsx
 import { Calendar } from 'lucide-react';
 
 const Logo = ({ className = 'text-2xl font-bold', onClick = () => {} }) => (

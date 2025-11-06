@@ -1,5 +1,4 @@
-// src/pages/MarketplaceScreen.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api, PRIMARY_GREEN } from '../api';
 import { Search, Clock, Zap, X, Send, Calendar, Users, ArrowLeft } from 'lucide-react';
@@ -54,7 +53,6 @@ const ProposeSwapModal = ({ listing, mySlots, onClose }) => {
             </p>
           </div>
 
-          {/* Available Slots Selector */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Your Slot to Offer</label>
             <select
@@ -71,7 +69,6 @@ const ProposeSwapModal = ({ listing, mySlots, onClose }) => {
             </select>
           </div>
 
-          {/* Optional Message */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Message (Optional)</label>
             <textarea
@@ -142,18 +139,22 @@ const MarketplaceContent = ({ setPage }) => {
   const [mySlots, setMySlots] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeListing, setActiveListing] = useState(null);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true); 
       try {
         const [swappableRes, mySlotsRes] = await Promise.all([
-          api.get('/swappable-slots'), // slots from other users
-          api.get('/events'),          // my slots
+          api.get('/swappable-slots'), 
+          api.get('/events'),          
         ]);
         setListings(swappableRes.data);
         setMySlots(mySlotsRes.data.filter(e => e.status === 'SWAPPABLE'));
       } catch (error) {
         console.error('Error fetching slots:', error);
+      } finally {
+        setLoading(false); 
       }
     };
     fetchData();
@@ -191,22 +192,30 @@ const MarketplaceContent = ({ setPage }) => {
 
       <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         <div className="max-w-7xl mx-auto">
-          <p className="text-sm font-medium text-gray-600 mb-6">
-            Showing {filteredListings.length} available slots.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredListings.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} onPropose={setActiveListing} />
-            ))}
-          </div>
-
-          {filteredListings.length === 0 && (
-            <div className="col-span-full border-4 border-dashed border-gray-200 p-12 rounded-xl text-center text-gray-500 mt-4">
-              <Zap className="w-12 h-12 mx-auto mb-4" />
-              <p className="font-semibold text-lg">No listings found.</p>
-              <p className="text-sm">Try adjusting your filters.</p>
+          {loading ? ( // Show loading state
+            <div className="text-center">
+              <p>Loading listings...</p>
             </div>
+          ) : (
+            <>
+              <p className="text-sm font-medium text-gray-600 mb-6">
+                Showing {filteredListings.length} available slots.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredListings.map((listing) => (
+                  <ListingCard key={listing.id} listing={listing} onPropose={setActiveListing} />
+                ))}
+              </div>
+
+              {filteredListings.length === 0 && (
+                <div className="col-span-full border-4 border-dashed border-gray-200 p-12 rounded-xl text-center text-gray-500 mt-4">
+                  <Zap className="w-12 h-12 mx-auto mb-4" />
+                  <p className="font-semibold text-lg">No listings found.</p>
+                  <p className="text-sm">Try adjusting your filters.</p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

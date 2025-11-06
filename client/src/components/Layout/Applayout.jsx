@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Sidebar from './Sidebar';
 import Logo from '../common/logo';
@@ -31,7 +30,7 @@ export default function AppLayout({ children, currentPage, setPage }) {
             <div className="flex items-center gap-2 bg-green-50 px-3 py-1 rounded-full shadow-sm">
               <User size={18} className="text-green-600" />
               <span className="font-semibold text-green-700 tracking-wide">
-                {user.name.split(' ')[0] || 'User'}
+                {user?.name?.split(' ')[0] || 'User'}
               </span>
             </div>
 

@@ -1,4 +1,3 @@
-// src/components/common/PasswordInput.jsx
 import { useState } from 'react';
 import { EyeOff, Eye } from 'lucide-react';
 
