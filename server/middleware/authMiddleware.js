@@ -11,7 +11,7 @@ export async function authMiddleware(req, res, next) {
     const payload = jwt.verify(token, JWT_SECRET);
     const user = await prisma.user.findUnique({ where: { id: payload.id }});
     if (!user) return res.status(401).json({ error: 'Invalid token' });
-    req.user = user; // attach user for controllers
+    req.user = user; 
     next();
   } catch (err) {
     return res.status(401).json({ error: 'Invalid token' });

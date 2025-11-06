@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api, PRIMARY_GREEN } from '../api';
-import { Search, Clock, Zap, X, Send, Calendar, Users, Briefcase, ArrowLeft } from 'lucide-react';
+import { Search, Clock, Zap, X, Send, Calendar, Users, ArrowLeft } from 'lucide-react';
 import { format, parseISO, formatDistanceToNow } from 'date-fns';
 
 const ProposeSwapModal = ({ listing, mySlots, onClose }) => {

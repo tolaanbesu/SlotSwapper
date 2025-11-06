@@ -1,7 +1,7 @@
 // src/pages/DashboardScreen.jsx 
 import { useState, useEffect } from 'react';
 import AppLayout from '../components/Layout/Applayout';
-import { PRIMARY_BLUE, PRIMARY_GREEN, api } from '../api';
+import { PRIMARY_BLUE, PRIMARY_GREEN, api, setAuthToken } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import { format, getDay, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, parseISO, addMonths, subMonths, isSameMonth } from 'date-fns';
@@ -16,19 +16,18 @@ const DashboardContent = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [view, setView] = useState('calendar');
     const [isOpen, setIsOpen] = useState(false);
-    const [editEvent, setEditEvent] = useState(null); // New state for editing an event
+    const [editEvent, setEditEvent] = useState(null); 
 
     // Fetch events from backend
     useEffect(() => {
     if (!token) return;
+    setAuthToken(token)
 
     const fetchEvents = async () => {
         setLoading(true);
         setError(null);
         try {
-            const res = await api.get('/events', {
-                headers: { Authorization: `Bearer ${token}` }, // Include the token in the request
-            });
+            const res = await api.get('/events');
             const fetchedEvents = res.data.map(ev => ({
                 ...ev,
                 startTime: ev.startTime instanceof Date ? ev.startTime : parseISO(ev.startTime),

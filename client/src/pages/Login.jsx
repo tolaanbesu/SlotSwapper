@@ -1,6 +1,4 @@
 
-
-// src/pages/Auth/LoginScreen.jsx
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import PasswordInput from '../components/common/PasswordInput';
@@ -22,9 +20,7 @@ const LoginScreen = ({ setPage }) => {
 
         if (!result.success) {
             setError(result.message);
-        } else {
-            // Success: App.jsx handles the page switch to 'dashboard'
-        }
+        } 
     };
 
     return (
