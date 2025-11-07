@@ -1,6 +1,6 @@
 import express from 'express';
 import { authMiddleware } from '../middleware/authMiddleware.js';
-import { getSwappableSlots, createSwapRequest, respondToSwapRequest, getRequests } from '../controllers/swapController.js';
+import { getSwappableSlots, createSwapRequest, respondToSwapRequest, getRequests, cancelSwapRequest } from '../controllers/swapController.js';
 const router = express.Router();
 
     router.get('/swappable-slots', authMiddleware, getSwappableSlots);
