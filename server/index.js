@@ -11,7 +11,7 @@ import swapRoutes from './routes/swapRoutes.js';
 const app = express();
 
 app.use(cors({
-  origin: 'https://slot-swapper-tq9b.vercel.app',
+  origin: 'https://slot-swapper-tq9b-l7qucarsx-tola-anbesus-projects.vercel.app/',
   credentials: true
 }));
 app.use(express.json());
