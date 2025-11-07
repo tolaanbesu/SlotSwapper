@@ -1,3 +1,4 @@
+
 {
   "version": 2,
   "builds": [
@@ -7,6 +8,7 @@
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "index.js" }
+    { "src": "/api/(.*)", "dest": "/index.js" }
   ]
 }
+
