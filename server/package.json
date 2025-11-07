@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.js' index.js",
     "start": "node index.js",
-    "vercel-build": "chmod +x node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node && prisma generate",
-    "postinstall": "prisma generate"
+    "vercel-build": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
