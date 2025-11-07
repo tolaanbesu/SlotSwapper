@@ -8,7 +8,7 @@ export const PRIMARY_RED = 'bg-red-500';
 export const LIGHT_BLUE_ACTIVE = 'bg-sky-100 text-sky-700';
 export const LIGHT_GREEN_ACTIVE = 'bg-lime-100 text-lime-700';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://slot-swapper-backend-sand.vercel.app/api';
 
 export const api = axios.create({
   baseURL: API_BASE,
